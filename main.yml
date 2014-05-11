@@ -12,7 +12,7 @@
     tags: mariadb
 
   - name: Add repository for mariadb-server
-    apt:  repo='deb http://mirrors.syringanetworks.net/mariadb/repo/10.0/ubuntu trusty main' state=present
+    apt_repository: repo='deb http://mirrors.syringanetworks.net/mariadb/repo/10.0/ubuntu trusty main' state=present
     tags: mariadb
 
   - name: Set root password for mariadb
