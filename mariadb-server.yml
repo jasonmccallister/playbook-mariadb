@@ -1,0 +1,25 @@
+---
+- hosts: "{{ my_hosts }}"
+  vars:
+    mariadb_root_password: "{{ my_mariadb_root_password }}"
+  remote_user: root
+  sudo: yes
+
+  tasks:
+
+  - name: Add repository key for mariadb-server
+    apt_key: url=http://keyserver.ubuntu.com/pks/lookup?op=get&fingerprint=on&search=0xcbcb082a1bb943db
+    tags: mariadb
+
+  - name: Add repository for mariadb-server
+    apt:  repo='deb http://mirrors.syringanetworks.net/mariadb/repo/10.0/ubuntu trusty main' state=present
+    tags: mariadb
+
+  - name: Set root password for mariadb
+    raw: debconf-set-selections <<< 'mysql-server-10.0 mysql-server/root_password password {{ my_mariadb_root_password}}'
+
+  - name: Set root password again
+    raw: debconf-set-selections <<< 'mysql-server-10.0 mysql-server/root_password_again password {{ my_mariadb_root_password }}'
+
+  - name: Install mariadb pacakge
+    apt: pkg=mariadb-server state=present
